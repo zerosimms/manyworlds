@@ -12,31 +12,37 @@ var app = express();
 app.use(express.static('./static'));
 
 // Registers an event triggered on HTTP GET /visit
-app.get("/reset/*", (req, res) => {
-    counter++;
-    
-    // Saves counter into the store and send response AFTER the store has been saved
-    storage.setItem("counter", counter).then(() => {
-        res.json(counter);
-    });
+app.get("/home/*", (req, res) => {
+  res.sendfile('./home/resets.html');
+  // res.send(counter);
+});
 
-    fs.writeFile('reset/resets.html', counter, function (err) {
+// Registers an event triggered on HTTP GET /visit
+app.get("/reset/*", (req, res) => {
+  counter++;
+
+  // Saves counter into the store and send response AFTER the store has been saved
+  storage.setItem("counter", counter).then(() => {
+    res.json(counter);
+    fs.writeFile('./home/resets.html', counter, function (err) {
       console.log("writing");
       if (err) return console.log(err);
     });
+  });
 });
+
 
 // Inits permanent storage and reads the saved counter
 storage.init().then(() => storage.getItem("counter")).then((value) => {
-    // Checks if value read is valid, otherwise set it to 0
-    if (value > 0) {
-        counter = value;
-    } else {
-        counter = 0;
-    }
+  // Checks if value read is valid, otherwise set it to 0
+  if (value > 0) {
+    counter = value;
+  } else {
+    counter = 0;
+  }
 
-    // Start the web server, listening on port 8080, AFTER the counter has been read
-    app.listen(PORT, () => {
-      console.log(`App running on port ${ PORT }`);
+  // Start the web server, listening on port 8080, AFTER the counter has been read
+  app.listen(PORT, () => {
+    console.log(`App running on port ${PORT}`);
   });
 });
