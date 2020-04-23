@@ -12,7 +12,7 @@ var app = express();
 app.use(express.static('./static'));
 
 // Registers an event triggered on HTTP GET /visit
-app.get("/reset", (req, res) => {
+app.get("/reset/*", (req, res) => {
     counter++;
     
     // Saves counter into the store and send response AFTER the store has been saved
@@ -20,7 +20,8 @@ app.get("/reset", (req, res) => {
         res.json(counter);
     });
 
-    fs.writeFile('resets.txt', counter, function (err) {
+    fs.writeFile('reset/resets.html', counter, function (err) {
+      console.log("writing");
       if (err) return console.log(err);
     });
 });
@@ -36,6 +37,6 @@ storage.init().then(() => storage.getItem("counter")).then((value) => {
 
     // Start the web server, listening on port 8080, AFTER the counter has been read
     app.listen(PORT, () => {
-      console.log(`Our app is running on port ${ PORT }`);
+      console.log(`App running on port ${ PORT }`);
   });
 });
