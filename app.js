@@ -1,6 +1,7 @@
 // Loads express and storage library
 const express = require('express');
 const storage = require('node-persist');
+const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 
 // Holds the current views
@@ -17,6 +18,10 @@ app.get("/reset", (req, res) => {
     // Saves counter into the store and send response AFTER the store has been saved
     storage.setItem("counter", counter).then(() => {
         res.json(counter);
+    });
+
+    fs.writeFile('resets.txt', counter, function (err) {
+      if (err) return console.log(err);
     });
 });
 
