@@ -1,6 +1,7 @@
 // Loads express and storage library
 const express = require('express');
 const storage = require('node-persist');
+const PORT = process.env.PORT || 3000;
 
 // Holds the current views
 var counter = 0;
@@ -29,5 +30,7 @@ storage.init().then(() => storage.getItem("counter")).then((value) => {
     }
 
     // Start the web server, listening on port 8080, AFTER the counter has been read
-    app.listen(3000, "0.0.0.0");
+    app.listen(PORT, () => {
+      console.log(`Our app is running on port ${ PORT }`);
+  });
 });
